@@ -1,2 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700&display=swap");
+
 @import "./normalize.scss";
 @import "./vars.scss";
+
+@font-face {
+  font-family: "magnificent";
+  src: url("fonts/MagnificChaos.ttf") format("truetype");
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+  
