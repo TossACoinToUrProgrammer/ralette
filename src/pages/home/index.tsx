@@ -1,17 +1,16 @@
 import React from 'react'
+import HeroSection from './sections/hero'
 
 function HomePage() {
   return (
     <div>
-      <div className="hero">
-        Hero section
-      </div>
+      <HeroSection />
 
-      <div className="info">
+      <div className="info" style={{height: '100vh'}}>
         Info section
       </div>
 
-      <div className="playCTA">
+      <div className="playCTA" style={{height: '100vh', background: 'teal'}}>
         Lets PLay
       </div>
     </div>
