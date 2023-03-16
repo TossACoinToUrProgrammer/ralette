@@ -28,13 +28,6 @@ enum Directions {
   down = "down",
 }
 
-const MOVE_KEYS: { key: Key; direction: Directions }[] = [
-  { key: "a", direction: Directions.left },
-  { key: "s", direction: Directions.down },
-  { key: "d", direction: Directions.right },
-  { key: "w", direction: Directions.up },
-]
-
 export class Knight {
   sprite: GameObj<
     | SpriteComp
@@ -47,6 +40,7 @@ export class Knight {
   >
   k: KaboomCtx
   state: KnightStates = KnightStates.idle
+  moveKeys: { key: Key; direction: Directions }[] = []
 
   constructor(
     k: KaboomCtx,
@@ -99,7 +93,7 @@ export class Knight {
       k.pos(pos.x, pos.y),
       k.anchor("center"),
       k.scale(4),
-      k.area({ offset: k.vec2(0, 10) }),
+      k.area({ scale: 0.8, offset: k.vec2(0, 10) }),
       k.body({ gravityScale: 0 }),
       k.color(),
       name,
@@ -109,34 +103,53 @@ export class Knight {
   }
 
   _init() {
-    this._initAnimEndListeners()
+    this._setAnimEndListener()
   }
 
-  initKeyListeners() {
-    // init move keys "down" and "release" listeners
-    MOVE_KEYS.forEach((moveKey) => {
+  setControls(controls: {
+    attack: Key
+    def: Key
+    moveUp: Key
+    moveDown: Key
+    moveLeft: Key
+    moveRight: Key
+  }) {
+    const { attack, def, moveUp, moveDown, moveLeft, moveRight } = controls
+
+    this._initMoveKeys(moveUp, moveDown, moveLeft, moveRight)
+    // set move keys "down" and "release" listeners
+    this.moveKeys.forEach((moveKey) => {
       this.k.onKeyDown(moveKey.key, () => {
         this.move(moveKey.direction)
       })
 
       this.k.onKeyRelease(moveKey.key, () => {
-        // play idle animation only if none of moveKeys are pressed
-        if (!this._isMoveKeyDown()) {
+        // play idle animation only if none of moveKeys are pressed and current state is run
+        if (!this._isMoveKeyDown() && this.state === KnightStates.run) {
           this.sprite.play(KnightStates.idle)
         }
       })
     })
 
-    this.k.onKeyPress("j", () => {
+    this.k.onKeyPress(attack, () => {
       this.attack()
     })
 
-    this.k.onKeyPress("k", () => {
+    this.k.onKeyPress(def, () => {
       this.def()
     })
   }
 
-  _initAnimEndListeners() {
+  _initMoveKeys(moveUp: Key, moveDown: Key, moveLeft: Key, moveRight: Key) {
+    this.moveKeys = [
+      { key: moveLeft, direction: Directions.left },
+      { key: moveDown, direction: Directions.down },
+      { key: moveRight, direction: Directions.right },
+      { key: moveUp, direction: Directions.up },
+    ]
+  }
+
+  _setAnimEndListener() {
     this.sprite.onAnimEnd((animation) => {
       if (animation !== KnightStates.idle && animation !== KnightStates.run) {
         this.state = KnightStates.idle
@@ -181,7 +194,7 @@ export class Knight {
     if (this.state !== KnightStates.run && this.state !== KnightStates.idle) {
       return
     }
-    
+ 
     this.state = KnightStates.attackCharge
     this.sprite.play(KnightStates.attack)
 
@@ -194,12 +207,12 @@ export class Knight {
     if (this.state !== KnightStates.run && this.state !== KnightStates.idle) {
       return
     }
-    
+
     this.state = KnightStates.def
     this.sprite.play(KnightStates.def)
   }
 
   _isMoveKeyDown(): boolean {
-    return MOVE_KEYS.some((moveKey) => this.k.isKeyDown(moveKey.key))
+    return this.moveKeys.some((moveKey) => this.k.isKeyDown(moveKey.key))
   }
 }
