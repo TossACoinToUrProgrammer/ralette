@@ -1,7 +1,9 @@
+import { CharacterControls } from "app/types"
 import {
   AnchorComp,
   AreaComp,
   BodyComp,
+  Color,
   ColorComp,
   GameObj,
   KaboomCtx,
@@ -11,7 +13,7 @@ import {
   SpriteComp,
 } from "kaboom"
 
-enum KnightStates {
+export enum KnightStates {
   idle = "idle",
   attack = "attack",
   def = "def",
@@ -41,12 +43,14 @@ export class Knight {
   k: KaboomCtx
   state: KnightStates = KnightStates.idle
   moveKeys: { key: Key; direction: Directions }[] = []
+  _onAttack?: Function
 
   constructor(
     k: KaboomCtx,
     framesImg: string,
     pos: { x: number; y: number },
-    name: string
+    name: string,
+    color?: [number, number, number]
   ) {
     this.k = k
 
@@ -74,10 +78,9 @@ export class Knight {
           speed: 5,
         },
         [KnightStates.stun]: {
-          from: 24,
+          from: 25,
           to: 34,
-          speed: 5,
-          loop: true,
+          speed: 10,
         },
         [KnightStates.run]: {
           from: 36,
@@ -95,7 +98,7 @@ export class Knight {
       k.scale(4),
       k.area({ scale: 0.8, offset: k.vec2(0, 10) }),
       k.body({ gravityScale: 0 }),
-      k.color(),
+      color ? k.color(...color) : k.color(),
       name,
     ])
 
@@ -106,21 +109,14 @@ export class Knight {
     this._setAnimEndListener()
   }
 
-  setControls(controls: {
-    attack: Key
-    def: Key
-    moveUp: Key
-    moveDown: Key
-    moveLeft: Key
-    moveRight: Key
-  }) {
+  setControls(controls: CharacterControls) {
     const { attack, def, moveUp, moveDown, moveLeft, moveRight } = controls
 
     this._initMoveKeys(moveUp, moveDown, moveLeft, moveRight)
     // set move keys "down" and "release" listeners
     this.moveKeys.forEach((moveKey) => {
       this.k.onKeyDown(moveKey.key, () => {
-        this.move(moveKey.direction)
+        this.run(moveKey.direction)
       })
 
       this.k.onKeyRelease(moveKey.key, () => {
@@ -157,7 +153,7 @@ export class Knight {
     })
   }
 
-  move(direction: Directions) {
+  run(direction: Directions) {
     if (this.state !== KnightStates.idle && this.state !== KnightStates.run) {
       return
     }
@@ -194,11 +190,12 @@ export class Knight {
     if (this.state !== KnightStates.run && this.state !== KnightStates.idle) {
       return
     }
- 
+
     this.state = KnightStates.attackCharge
     this.sprite.play(KnightStates.attack)
 
     setTimeout(() => {
+      if (this._onAttack) this._onAttack()
       this.state = KnightStates.attack
     }, 150)
   }
@@ -210,6 +207,33 @@ export class Knight {
 
     this.state = KnightStates.def
     this.sprite.play(KnightStates.def)
+  }
+
+  stunned() {
+    this.state = KnightStates.stun
+    this.sprite.play(KnightStates.stun)
+  }
+
+  attacked(pushDirection: "left" | "right") {
+    // set red filter
+    const temp = { ...this.sprite.color } as Color
+    this.sprite.color.r = 255
+    this.sprite.color.g = 55
+    this.sprite.color.b = 55
+
+    // smooth push effect
+    const interval = setInterval(() => {
+      this.sprite.move(pushDirection === "left" ? -200 : 200, 0)
+    }, 30)
+
+    setTimeout(() => {
+      this.sprite.color = temp
+      clearInterval(interval)
+    }, 300)
+  }
+
+  onAttack(cb: Function) {
+    this._onAttack = cb
   }
 
   _isMoveKeyDown(): boolean {
