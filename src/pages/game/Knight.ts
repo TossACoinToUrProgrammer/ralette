@@ -21,6 +21,7 @@ export enum KnightStates {
   die = "die",
   run = "run",
   attackCharge = "attackCharge",
+  defCharge = "defCharge",
 }
 
 enum Directions {
@@ -205,8 +206,19 @@ export class Knight {
       return
     }
 
-    this.state = KnightStates.def
+    this.state = KnightStates.defCharge
     this.sprite.play(KnightStates.def)
+
+    let resetColors: Function
+    setTimeout(() => {
+      this.state = KnightStates.def
+      resetColors = this._changeColor(155, 255, 55)
+    }, 60)
+
+    setTimeout(() => {
+      this.state = KnightStates.defCharge
+      resetColors()
+    }, 200)
   }
 
   stunned() {
@@ -216,10 +228,7 @@ export class Knight {
 
   attacked(pushDirection: "left" | "right") {
     // set red filter
-    const temp = { ...this.sprite.color } as Color
-    this.sprite.color.r = 255
-    this.sprite.color.g = 55
-    this.sprite.color.b = 55
+    const resetColors = this._changeColor(255, 55, 55)
 
     // smooth push effect
     const interval = setInterval(() => {
@@ -227,13 +236,23 @@ export class Knight {
     }, 30)
 
     setTimeout(() => {
-      this.sprite.color = temp
+      resetColors()
       clearInterval(interval)
     }, 300)
   }
 
   onAttack(cb: Function) {
     this._onAttack = cb
+  }
+
+  // changes sprite.color and returns function that cancels these changes
+  _changeColor(r: number, g: number, b: number) {
+    const temp = { ...this.sprite.color } as Color
+    this.sprite.color = { r, g, b } as Color
+
+    return () => {
+      this.sprite.color = temp
+    }
   }
 
   _isMoveKeyDown(): boolean {
