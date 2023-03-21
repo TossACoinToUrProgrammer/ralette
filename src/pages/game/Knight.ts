@@ -13,6 +13,9 @@ import {
   SpriteComp,
 } from "kaboom"
 
+import knightFramesPNG from "./knight_frames_small.png"
+import slashPng from "./slashFrames2.png"
+
 export enum KnightStates {
   idle = "idle",
   attack = "attack",
@@ -48,14 +51,13 @@ export class Knight {
 
   constructor(
     k: KaboomCtx,
-    framesImg: string,
     pos: { x: number; y: number },
     name: string,
     color?: [number, number, number]
   ) {
     this.k = k
 
-    k.loadSprite("knight", framesImg, {
+    k.loadSprite("knight", knightFramesPNG, {
       sliceX: 46,
       anims: {
         [KnightStates.idle]: {
@@ -91,6 +93,16 @@ export class Knight {
         },
       },
     })
+    k.loadSprite("slash", slashPng, {
+      sliceX: 6,
+      anims: {
+        slash: {
+          from: 0,
+          to: 5,
+          speed: 10,
+        },
+      },
+    })
 
     this.sprite = k.add([
       k.sprite("knight"),
@@ -99,6 +111,7 @@ export class Knight {
       k.scale(4),
       k.area({ scale: 0.8, offset: k.vec2(0, 10) }),
       k.body({ gravityScale: 0 }),
+      k.z(1),
       color ? k.color(...color) : k.color(),
       name,
     ])
@@ -197,8 +210,25 @@ export class Knight {
 
     setTimeout(() => {
       if (this._onAttack) this._onAttack()
+      this._playSlashAnim()
       this.state = KnightStates.attack
     }, 150)
+  }
+
+  _playSlashAnim() {
+    const x = this.sprite.flipX ? -130 : -50
+
+    const slash = this.k.add([
+      this.k.sprite("slash"),
+      this.k.pos(this.sprite.pos.x + x, this.sprite.pos.y - 80),
+      this.k.lifespan(0.3, { fade: 0.5 }),
+      this.k.scale(0.6),
+      this.k.z(0),
+    ]) as GameObj<SpriteComp>
+
+    slash.flipX = this.sprite.flipX
+
+    slash.play("slash")
   }
 
   def() {
@@ -213,7 +243,7 @@ export class Knight {
     setTimeout(() => {
       this.state = KnightStates.def
       resetColors = this._changeColor(155, 255, 55)
-    }, 60)
+    }, 40)
 
     setTimeout(() => {
       this.state = KnightStates.defCharge
