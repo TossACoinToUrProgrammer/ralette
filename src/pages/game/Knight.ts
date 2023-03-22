@@ -6,6 +6,7 @@ import {
   Color,
   ColorComp,
   GameObj,
+  HealthComp,
   KaboomCtx,
   Key,
   PosComp,
@@ -43,6 +44,7 @@ export class Knight {
     | AreaComp
     | BodyComp
     | ColorComp
+    | HealthComp
   >
   k: KaboomCtx
   state: KnightStates = KnightStates.idle
@@ -112,6 +114,7 @@ export class Knight {
       k.area({ scale: 0.8, offset: k.vec2(0, 10) }),
       k.body({ gravityScale: 0 }),
       k.z(1),
+      k.health(8),
       color ? k.color(...color) : k.color(),
       name,
     ])
@@ -264,6 +267,8 @@ export class Knight {
     const interval = setInterval(() => {
       this.sprite.move(pushDirection === "left" ? -200 : 200, 0)
     }, 30)
+
+    this.sprite.hurt(1)
 
     setTimeout(() => {
       resetColors()
