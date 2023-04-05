@@ -1,0 +1,26 @@
+.playCtaWrapper {
+  background: rgba(13, 20, 34, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 50vh;
+  background-image: url("./assets/images/123.jpg");
+  background-size: contain;
+
+  .button {
+    position: absolute;
+    bottom: -20px;
+    font-size: 18px;
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.shieldImg {
+  width: 300px;
+}

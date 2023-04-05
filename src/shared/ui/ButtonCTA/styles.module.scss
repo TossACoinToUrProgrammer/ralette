@@ -4,13 +4,13 @@ button.button {
   border-radius: 10px;
   font-family: "Poppins";
   text-transform: none;
-  background-color: var(--primary);
+  background-color: rgb(226, 70, 22);
   box-shadow: inset 0px 20px 10px rgba(0, 0, 0, 0.13);
   transition: all 0.3s ease 0s;
   
   &:hover {
-    background-color: var(--primary);
-    box-shadow: inset 0px 20px 10px rgba(0, 0, 0, 0.13), 0px 10px 20px rgba(46, 229, 157, 0.4);
+    background-color: rgb(226, 70, 22);
+    box-shadow: inset 0px 20px 10px rgba(0, 0, 0, 0.13), 0px 10px 20px rgba(232, 96, 0, 0.4);
     transform: translateY(-3px);
   }
 }
