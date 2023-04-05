@@ -1,0 +1,55 @@
+.sectionWrapper {
+  position: relative;
+  padding: 200px 0 0;
+  background: rgba(13, 20, 34, 1);
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 30px;
+    background: linear-gradient(
+      90deg,
+      rgba(13, 20, 34, 1) 0%,
+      rgba(13, 20, 34, 1) 15%,
+      rgba(13, 46, 65, 1) 30%,
+      rgba(13, 20, 34, 1) 100%
+    );
+    filter: blur(20px);
+  }
+}
+
+.content {
+  color: white;
+}
+
+.imageWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background-color: rgb(64, 84, 89);
+    filter: blur(20px);
+  }
+
+  img {
+    z-index: 2;
+  }
+}
+
+.title {
+  font-size: 42px;
+  color: orange;
+  line-height: 2;
+  font-family: 'oldania';
+}

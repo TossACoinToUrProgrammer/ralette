@@ -1,18 +1,16 @@
 import React from 'react'
+import AboutGameSection from './sections/aboutGame'
 import HeroSection from './sections/hero'
+import PlayCTA from './sections/playCta'
 
 function HomePage() {
   return (
     <div>
       <HeroSection />
 
-      <div className="info" style={{height: '100vh'}}>
-        Info section
-      </div>
+      <AboutGameSection />
 
-      <div className="playCTA" style={{height: '100vh', background: 'teal'}}>
-        Lets PLay
-      </div>
+      <PlayCTA />
     </div>
   )
 }
