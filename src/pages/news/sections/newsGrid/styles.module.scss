@@ -1,0 +1,11 @@
+.gridWrapper {
+  padding-top: 30px;
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 400px);
+    justify-content: center;
+    column-gap: 15px;
+    row-gap: 25px;
+  }
+}
