@@ -1,0 +1,36 @@
+.tabs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-bottom: 5px solid #313131;
+}
+
+.tabsContainer {
+  position: absolute;
+  bottom: 0px;
+}
+
+.tab {
+  width: 192px;
+  height: 58px;
+
+  font-family: Poppins;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 600;
+  border: none;
+  color: rgba(255, 255, 255, 0.67);
+  background-color: #222;
+  cursor: pointer;
+  border-top: 2px solid #222;
+
+  &.active {
+    color: white;
+    border-top: 2px solid gray;
+    background-color: #313131;
+  }
+
+  &:first-child {
+    margin-right: 15px;
+  }
+}

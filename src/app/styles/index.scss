@@ -13,7 +13,16 @@
   src: url("fonts/Oldania-Bold.otf") format("truetype");
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Poppins", sans-serif;
 }
-  
+
+@media (min-width: 1600px) {
+  body .css-1oqqzyl-MuiContainer-root {
+    max-width: 1600px;
+  }
+}
