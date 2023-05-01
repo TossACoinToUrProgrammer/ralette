@@ -5,6 +5,7 @@ import styles from './styles.module.scss'
 import Headline from './sections/headline'
 import Tabs from './sections/tabs'
 import NewsGrid from './sections/newsGrid'
+import UpdatesList from './sections/updatesList'
 
 const NewsPage = () => {
     const [activeTab, setActiveTab] = useState(0)
@@ -15,8 +16,8 @@ const NewsPage = () => {
             <Headline />
             <Tabs value={activeTab} onChange={setActiveTab} />
             {activeTab === 0 && <NewsGrid />}
-            {activeTab === 1 && "Updates"}
-            
+            {activeTab === 1 && <UpdatesList />}
+
         </Box>
     )
 }

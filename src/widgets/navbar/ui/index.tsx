@@ -9,7 +9,7 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const registerClick = () => {
-        navigate('/auth');
+        navigate('/game');
     }
 
     return (
@@ -20,10 +20,8 @@ const Navbar = () => {
                     <Grid container item xs={8} display='flex' justifyContent='flex-end' columnSpacing={6}>
                         <Grid item><Link to='/'>Home</Link></Grid>
                         <Grid item><Link to='/news'>News</Link></Grid>
-                        <Grid item><Link to='/how-it-works'>How it works</Link></Grid>
-                        <Grid item><Link to='/about-us'>About Us</Link></Grid>
                     </Grid>
-                    <ButtonCTA onClick={registerClick}>Register</ButtonCTA>
+                    <ButtonCTA onClick={registerClick}>Play!</ButtonCTA>
                 </Grid>
             </Container>
         </Box>

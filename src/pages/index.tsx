@@ -8,7 +8,6 @@ const AboutPage = lazy(() => import("./about"));
 const AuthPage = lazy(() => import("./auth"));
 const GamePage = lazy(() => import("./game"));
 
-
 export const Routing = () => {
     return (
         <>
