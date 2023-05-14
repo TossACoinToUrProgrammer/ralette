@@ -1,51 +1,26 @@
-import React from 'react'
-import styles from './styles.module.scss'
-import { IUpdatesItem, IUpdatesList } from 'shared/types'
+import React, { useEffect } from 'react'
 import { Container } from '@mui/material'
+
+import styles from './styles.module.scss'
 import UpdatesItem from 'entities/updates-item'
+import { useAppDispatch, useAppSelector } from 'app/hooks/storeHooks'
+import { fetchUpdates } from 'store/slices/updatesSlice'
 
-const array = [
-    {
-        id: 0,
-        title: 'Обновление Dota 2 — 17 марта 2023 года',
-        date: '18 МАРТА 2023 Г.',
-        subtitle: 'Обновление баланса',
-        updates: [{
-            title: 'Моржогр',
-            changes: ['Радиус области приземления увеличен с 200 до 250', 'Урон за уровень увеличен с 15 до 25'],
-        }]
-    },
-    {
-        id: 1,
-        title: 'Обновление Dota 2 — 15 марта 2023 года',
-        date: '15 МАРТА 2023 Г.',
-        subtitle: '',
-        updates: [{
-            title: 'Моржогр',
-            changes: ['Радиус области приземления увеличен с 200 до 250', 'Урон за уровень увеличен с 15 до 25'],
-        }]
-    },
-    {
-        id: 2,
-        title: 'Обновление Dota 2 — 28 февраля 2023 года',
-        date: '28 ФЕВРАЛЯ 2023 Г.',
-        subtitle: '',
-        updates: [{
-            title: 'Моржогр',
-            changes: ['Радиус области приземления увеличен с 200 до 250', 'Урон за уровень увеличен с 15 до 25'],
-        }]
-    },
-]
+const UpdatesList: React.FC = () => {
+    const { loading, updates } = useAppSelector(state => state.updates)
+    const dispatch = useAppDispatch()
 
-interface UpdatesListProps {
-    updates: IUpdatesItem[]
-}
-
-const UpdatesList: React.FC<UpdatesListProps> = ({ updates }) => {
+    useEffect(() => {
+        if (!updates.length) {
+            dispatch(fetchUpdates())
+        }
+    }, [updates])
+    
     return (
         <div className={styles.updatesWrapper}>
+            {loading && <div>Loading ...</div>}
             <Container>
-                {array.map(item => <UpdatesItem key={item.id} update={item} />)}
+                {updates.map(item => <UpdatesItem key={item._id} update={item} />)}
             </Container>
         </div>
     )

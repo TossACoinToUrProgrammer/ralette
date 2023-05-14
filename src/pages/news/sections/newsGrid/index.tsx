@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 import { Container } from '@mui/material'
 import NewsCard from 'entities/news-card'
+import { useAppSelector } from 'app/hooks/storeHooks'
 const array = [
   {
     date: '25 МАРТА 2023 Г.',
@@ -41,10 +42,13 @@ const array = [
   },
 ]
 const NewsGrid = () => {
+  const { news, loading } = useAppSelector(state => state.news)
+
   return (
     <div className={styles.gridWrapper}>
       <Container className={styles.grid}>
-        {array.map(item => <NewsCard key={item.title} title={item.title} date={item.date} imageUrl={item.imageUrl} description={item.description} />)}
+        {loading && <div>Loading...</div>}
+        {news.map(item => <NewsCard key={item.title} title={item.title} date={item.date} imageUrl={item.imageUrl} description={item.description} />)}
       </Container>
     </div>
   )

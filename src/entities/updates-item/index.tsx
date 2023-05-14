@@ -14,10 +14,10 @@ const UpdatesItem: React.FC<UpdatesItemProps> = ({ update }) => {
             <h4 className={styles.title}>{update.title}</h4>
             <h5 className={styles.subtitle}>{update.subtitle}</h5>
             {update.updates?.map(item =>
-                <div className={styles.changes}>
+                <div key={item.title} className={styles.changes}>
                     <span className={styles.changesTitle}>{item.title}</span>: <br />
                     <ul>
-                        {item.changes.map(change => <li>{change}</li>)}
+                        {item.changes.map(change => <li key={change}>{change}</li>)}
                     </ul>
                 </div>
             )}
@@ -26,3 +26,4 @@ const UpdatesItem: React.FC<UpdatesItemProps> = ({ update }) => {
 }
 
 export default UpdatesItem
+    

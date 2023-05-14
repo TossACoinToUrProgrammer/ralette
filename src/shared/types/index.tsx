@@ -1,5 +1,5 @@
 interface IUpdatesItem {
-    id: number,
+    _id: string,
     title: string,
     date: string,
     subtitle?: string,
@@ -13,4 +13,12 @@ interface IUpdatesList {
     items: IUpdatesItem[]
 }
 
-export type { IUpdatesItem, IUpdatesList }
+interface INewsItem {
+    _id: string,
+    title: string,
+    date: string,
+    imageUrl: string,
+    description: string
+}
+
+export type { IUpdatesItem, IUpdatesList, INewsItem }
